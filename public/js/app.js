@@ -2416,7 +2416,7 @@ var render = function render() {
     attrs: {
       to: "/"
     }
-  }, [_vm._v("Navbar")]), _vm._v(" "), _vm._m(0), _vm._v(" "), this.$store.state.token === "" ? _c("div", {
+  }, [_vm._v("Navbar")]), _vm._v(" "), _vm._m(0), _vm._v(" "), this.$store.state.token !== "" ? _c("div", {
     staticClass: "collapse navbar-collapse",
     attrs: {
       id: "navbarSupportedContent"
