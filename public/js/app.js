@@ -2076,8 +2076,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "App",
   data: function data() {
-    return {
-      isLogged: localStorage.getItem('token')
+    return {// isLogged:localStorage.getItem('token')
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(['auth'])), {}, {
@@ -2140,7 +2139,6 @@ __webpack_require__.r(__webpack_exports__);
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(function (response) {
-        // this.notes.splice(index,1)
         window.location.reload();
       });
     }
@@ -2316,7 +2314,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       id: this.$route.params.id,
-      note: []
+      note: [],
+      labels: [],
+      label: ''
     };
   },
   methods: {
@@ -2338,6 +2338,35 @@ __webpack_require__.r(__webpack_exports__);
           path: '../dashboard'
         });
       });
+    },
+    addLabel: function addLabel(e) {
+      e.preventDefault();
+      var params = {
+        id: this.note.id,
+        title: this.label
+      };
+      console.log(params);
+      axios.post('http://localhost:8000/api/label/store', params, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(function (response) {
+        // console.log(response);
+        // this.label='';
+        window.location.reload();
+      });
+    },
+    deleteLabel: function deleteLabel(item) {
+      axios["delete"]("http://localhost:8000/api/label/delete/".concat(item.id), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(function (response) {
+        alert('Successful removal');
+        window.location.reload();
+      });
     }
   },
   created: function created() {
@@ -2350,6 +2379,14 @@ __webpack_require__.r(__webpack_exports__);
       }
     }).then(function (response) {
       _this2.note = response.data;
+    });
+    axios.get('http://localhost:8000/api/label/show/' + this.id, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(function (response) {
+      _this2.labels = response.data;
     });
   }
 });
@@ -2379,7 +2416,7 @@ var render = function render() {
     attrs: {
       to: "/"
     }
-  }, [_vm._v("Navbar")]), _vm._v(" "), _vm._m(0), _vm._v(" "), !_vm.isLogged !== "" ? _c("div", {
+  }, [_vm._v("Navbar")]), _vm._v(" "), _vm._m(0), _vm._v(" "), this.$store.state.token === "" ? _c("div", {
     staticClass: "collapse navbar-collapse",
     attrs: {
       id: "navbarSupportedContent"
@@ -2997,11 +3034,67 @@ var render = function render() {
     on: {
       click: _vm.edit
     }
-  }, [_vm._v("Submit")])])])]), _vm._v(" "), _c("h3", {
+  }, [_vm._v("Edit")])])])]), _vm._v(" "), _c("h3", {
     staticClass: "text-center"
   }, [_vm._v("Add Label")]), _vm._v(" "), _c("div", {
     staticClass: "row mt-5"
-  })]);
+  }, [_c("div", {
+    staticClass: "col-md-8 mx-auto"
+  }, [_c("div", {
+    staticClass: "labels"
+  }, _vm._l(_vm.labels, function (item, index) {
+    return _c("div", {
+      key: index,
+      staticClass: "label d-flex justify-content-between align-items-center my-3 shadow py-3 px-4"
+    }, [_c("div", {
+      staticClass: "title"
+    }, [_c("h6", {
+      staticClass: "m-0"
+    }, [_vm._v(_vm._s(item.title))])]), _vm._v(" "), _c("div", {
+      staticClass: "actions"
+    }, [_c("button", {
+      staticClass: "btn btn-danger btn-sm",
+      on: {
+        click: function click($event) {
+          return _vm.deleteLabel(item);
+        }
+      }
+    }, [_vm._v("Delete")])])]);
+  }), 0), _vm._v(" "), _c("form", [_c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": ""
+    }
+  }, [_vm._v("Title")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.label,
+      expression: "label"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.label
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.label = $event.target.value;
+      }
+    }
+  })]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    },
+    on: {
+      click: _vm.addLabel
+    }
+  }, [_vm._v("Add Label")])])])])]);
 };
 
 var staticRenderFns = [];
@@ -3189,7 +3282,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     token: '',
-    auth: localStorage.getItem('token')
+    auth: null
   },
   getters: {},
   mutations: {},

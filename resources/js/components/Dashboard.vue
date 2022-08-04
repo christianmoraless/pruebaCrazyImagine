@@ -108,7 +108,6 @@
                         'Authorization': 'Bearer '+localStorage.getItem('token')
                     },
                 }).then(response => {
-                    // this.notes.splice(index,1)
                     window.location.reload();
                 })
             }

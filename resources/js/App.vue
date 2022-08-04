@@ -7,7 +7,7 @@
             </button>
 
            
-            <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="!isLogged !== ''" >
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="this.$store.state.token === ''" >
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
@@ -42,7 +42,7 @@
         name:"App",
         data(){
             return{
-                isLogged:localStorage.getItem('token')
+                // isLogged:localStorage.getItem('token')
             }
         },
         methods:{

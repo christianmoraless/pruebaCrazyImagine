@@ -26,3 +26,11 @@ Route::group(['prefix' => 'notes'], function () {
     Route::middleware('auth:api')->get('show/{id}',[App\Http\Controllers\NoteController::class,'show']);
     Route::middleware('auth:api')->put('update/{id}',[App\Http\Controllers\NoteController::class,'update']);
 });
+
+
+Route::group(['prefix' => 'label'], function () {
+    Route::middleware('auth:api')->get('index',[App\Http\Controllers\LabelController::class,'index']);
+    Route::middleware('auth:api')->get('show/{id}',[App\Http\Controllers\LabelController::class,'show']);
+    Route::middleware('auth:api')->post('store',[App\Http\Controllers\LabelController::class,'store']);
+    Route::middleware('auth:api')->delete('delete/{id}',[App\Http\Controllers\LabelController::class,'destroy']);
+});
